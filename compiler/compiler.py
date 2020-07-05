@@ -1,5 +1,6 @@
 import sys
 import scanner
+import parser
 
 def main(path):
     try:
@@ -10,13 +11,11 @@ def main(path):
         return 1
 
     _scanner = scanner.Scanner(content)
-    output = _scanner()
-    while output:
-      output = _scanner()
+    _parser = parser.Parser(_scanner)
     return 0
 
 
 if __name__ == '__main__':
     # TODO: Read input file from arguments
-    status = main('../input.txt')
+    status = main('./input.txt')
     sys.exit(status)

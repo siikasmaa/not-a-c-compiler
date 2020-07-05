@@ -3,3 +3,4 @@ __pycache__/
 WA*.md
 compiler/output/
 .vscode
+compiler/input.txt

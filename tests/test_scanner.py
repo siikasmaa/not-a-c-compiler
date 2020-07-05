@@ -29,7 +29,11 @@ class TestScanner(unittest.TestCase):
 
         for expected_token in expected_tokens:
             current_token = scanner()
-            self.assertEqual(current_token.get_type(), expected_token.name)
+            self.assertEqual(current_token.get_type(), expected_token)
+
+        # Check last token
+        current_token = scanner()
+        self.assertEqual(current_token.get_type(), TokenType.END)
 
     def test_token_lexeme(self):
         scanner = Scanner(self.valid_input)
@@ -70,8 +74,7 @@ class TestScanner(unittest.TestCase):
 
         for expected_token in expected_tokens:
             current_token = scanner()
-            self.assertEqual(current_token.get_type(), expected_token.name)
-
+            self.assertEqual(current_token.get_type(), expected_token)
 
     def test_invalid_input_lexeme(self):
         scanner = Scanner(self.invalid_input)

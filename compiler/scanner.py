@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 from enum import Enum
 from token import Token, TokenType
 
@@ -21,9 +22,9 @@ class Scanner():
         self._tokens = []
         # Clear files
         try:
-          os.mkdir('./output')
+            os.mkdir('./output')
         except FileExistsError:
-          pass
+            pass
         with open(self._tokens_file, 'w') as tokens_file:
             tokens_file.write("")
         with open(self._lexical_errors_file, 'w') as lexical_errors_file:
@@ -35,37 +36,37 @@ class Scanner():
     _lexical_errors_file = "./output/lexical_errors.txt"
     _tokens_file = './output/tokens.txt'
 
-    _symbols = {
-        ";": TokenType.SEMICOLON,
-        ":": TokenType.COLON,
-        ",": TokenType.COMMA,
-        "[": TokenType.LEFT_SQUARE_BRACKET,
-        "]": TokenType.RIGHT_SQUARE_BRACKET,
-        "(": TokenType.LEFT_PARENTHESIS,
-        ")": TokenType.RIGHT_PARENTHESIS,
-        "{": TokenType.LEFT_CURLY_BRACKET,
-        "}": TokenType.RIGHT_CURLY_BRACKET,
-        "+": TokenType.ADDITION,
-        "-": TokenType.SUBTRACTION,
-        "*": TokenType.MULTIPLICATION,
-        "=": TokenType.ASSIGN,
-        "<": TokenType.LESS_THAN,
-        "==": TokenType.EQUAL
-    }
+    _symbols = [
+        ";",
+        ":",
+        ",",
+        "[",
+        "]",
+        "(",
+        ")",
+        "{",
+        "}",
+        "+",
+        "-",
+        "*",
+        "=",
+        "<",
+        "=="
+    ]
 
-    _reserved_keywords = {
-        "if": TokenType.IF,
-        "else": TokenType.ELSE,
-        "void": TokenType.VOID,
-        "int": TokenType.INT,
-        "while": TokenType.WHILE,
-        "break": TokenType.BREAK,
-        "continue": TokenType.CONTINUE,
-        "switch": TokenType.SWITCH,
-        "default": TokenType.DEFAULT,
-        "case": TokenType.CASE,
-        "return": TokenType.RETURN
-    }
+    _reserved_keywords = [
+        "if",
+        "else",
+        "void",
+        "int",
+        "while",
+        "break",
+        "continue",
+        "switch",
+        "default",
+        "case",
+        "return"
+    ]
 
     def get_next_token(self):
         current_char = self._get_next_char()
@@ -83,10 +84,9 @@ class Scanner():
             return next_token
 
         if self._is_end_of_content():
-          return
+            return self._create_eof_token()
         self.create_lexical_error(current_char)
         return self.get_next_token()
-
 
     def create_lexical_error(self, character):
         if chr(character) == '*' and chr(self._peek_next_char()) == '/':
@@ -227,7 +227,7 @@ class Scanner():
     def create_token(self, token_type, lexeme):
         token = Token(self._current_row,
                       self._current_token_column, token_type, lexeme)
-        self._tokens.append((token.get_type(), lexeme))
+        self._tokens.append((token.get_type().name, lexeme))
         return token
 
     def _create_symbol_token(self, character):
@@ -250,6 +250,9 @@ class Scanner():
                 self._current_row, lexeme, LexicalError.INVALID_NUMBER)
             return  # Should propably return ERROR token in the future
         return self.create_token(TokenType.NUM, lexeme)
+
+    def _create_eof_token(self):
+        return self.create_token(TokenType.END, '$')
 
     def _create_id_or_keyword_token(self, character):
         lexeme = ""

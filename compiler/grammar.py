@@ -1,0 +1,65 @@
+import sys
+from enum import Enum, unique
+from token import TokenType
+
+@unique
+class GrammarString(Enum):
+  ADDITIVE_EXPRESSION = "AdditiveExpression"
+  ADDITIVE_EXPRESSION_PRIME = "AdditiveExpressionPrime"
+  ADDITIVE_EXPRESSION_ZEGOND = "AdditiveExpressionZegond"
+  ADDOP = "Addop"
+  ARG_LIST = "ArgList"
+  ARG_LIST_PRIME = "ArgListPrime"
+  ARGS = "Args"
+  B = "B"
+  C = "C"
+  CASE_STMT = "CaseStmt"
+  CASE_STMTS = "CaseStmts"
+  COMPOUND_STMT = "CompoundStmt"
+  D = "D"
+  DECLARATION = "Declaration"
+  DECLARATION_INITIAL = "DeclarationInitial"
+  DECLARATION_LIST = "DeclarationList"
+  DECLARATION_PRIME = "DeclarationPrime"
+  DEFAULT_STMT = "DefaultStmt"
+  EPSILON = "epsilon"
+  EXPRESSION = "Expression"
+  EXPRESSION_STMT = "ExpressionStmt"
+  FACTOR = "Factor"
+  FACTOR_PRIME = "FactorPrime"
+  FACTOR_ZEGOND = "FactorZegond"
+  FUN_DECLARATION_PRIME = "FunDeclarationPrime"
+  G = "G"
+  H = "H"
+  ITERATION_STMT = "IterationStmt"
+  PARAM = "Param"
+  PARAM_LIST = "ParamList"
+  PARAM_LIST_VOID_ABTAR = "ParamListVoidAbtar"
+  PARAM_PRIME = "ParamPrime"
+  PARAMS = "Params"
+  PROGRAM = "Program"
+  RELOP = "Relop"
+  RETURN_STMT = "ReturnStmt"
+  RETURN_STMT_PRIME = "ReturnStmtPrime"
+  SELECTION_STMT = "SelectionStmt"
+  SIGNED_FACTOR = "SignedFactor"
+  SIGNED_FACTOR_PRIME = "SignedFactorPrime"
+  SIGNED_FACTOR_ZEGOND = "SignedFactorZegond"
+  SIMPLE_EXPRESSION_PRIME = "SimpleExpressionPrime"
+  SIMPLE_EXPRESSION_ZEGOND = "SimpleExpressionZegond"
+  STATEMENT = "Statement"
+  STATEMENT_LIST = "StatementList"
+  SWITCH_STMT = "SwitchStmt"
+  TERM = "Term"
+  TERM_PRIME = "TermPrime"
+  TERM_ZEGOND = "TermZegond"
+  TYPE_SPECIFIER = "TypeSpecifier"
+  VAR_CALL_PRIME = "VarCallPrime"
+  VAR_DECLARATION_PRIME = "VarDeclarationPrime"
+  VAR_PRIME = "VarPrime"
+
+class Grammar():
+
+  grammar = {
+    GrammarString.PROGRAM: ['epsilon', 'int', 'void']
+  }
