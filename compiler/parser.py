@@ -44,9 +44,9 @@ class Parser():
                 self._add_parse_tree_node("(%s, %s)" % (
                     current_token.get_type().name, current_token.get_lexeme()), current_node)
                 current_token = self._scanner.get_next_token()
-            elif current_grammar_string in self.parse_table:
+            elif current_grammar_string in self.grammar:
                 self._pop_stack()
-                parse_action = self.parse_table[current_grammar_string]
+                parse_action = self.grammar[current_grammar_string]
                 if current_input in parse_action:
                     actions = parse_action[current_input]
                 elif current_token.get_type() in parse_action:
@@ -131,7 +131,7 @@ class Parser():
             output += "%s%s\n" % (pre, node.name)
         return output
 
-    parse_table = {
+    grammar = {
         GrammarString.PROGRAM: {
             'void': [GrammarString.DECLARATION_LIST], 'int': [GrammarString.DECLARATION_LIST], '': [GrammarString.DECLARATION_LIST]
         },

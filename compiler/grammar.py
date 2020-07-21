@@ -57,9 +57,3 @@ class GrammarString(Enum):
   VAR_CALL_PRIME = "VarCallPrime"
   VAR_DECLARATION_PRIME = "VarDeclarationPrime"
   VAR_PRIME = "VarPrime"
-
-class Grammar():
-
-  grammar = {
-    GrammarString.PROGRAM: ['epsilon', 'int', 'void']
-  }

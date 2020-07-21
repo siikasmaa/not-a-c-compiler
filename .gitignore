@@ -2,6 +2,9 @@
 __pycache__/
 *.pyc
 WA*.md
+*.pages
+*.pdf
 compiler/output/
 .vscode
 compiler/input.txt
+*.zip
