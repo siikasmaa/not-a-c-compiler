@@ -8,3 +8,5 @@ compiler/output/
 .vscode
 compiler/input.txt
 *.zip
+assignments/
+/output/

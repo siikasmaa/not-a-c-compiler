@@ -9,7 +9,6 @@ def main(path):
     except IOError:
         print("Error: File not found.")
         return 1
-
     _scanner = scanner.Scanner(content)
     _parser = parser.Parser(_scanner)
     return 0

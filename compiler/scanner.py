@@ -1,7 +1,8 @@
 import sys
 import os
 from enum import Enum
-from token import Token, TokenType
+from .token import Token, TokenType, OPERATORS, RESERVED_KEYWORDS
+from .symbol import Symbol, SymbolTable
 
 
 class LexicalError(Enum):
@@ -13,60 +14,31 @@ class LexicalError(Enum):
 
 class Scanner():
 
-    def __init__(self, content):
+    def __init__(self, content, **kwargs):
         self._current_char_index = 0
         self._current_row = 1
         self._current_column = 0
         self._current_token_column = 0
         self._input = content
         self._tokens = []
+        self._symbol_table = SymbolTable()
+        self.OUTPUT = kwargs.get('OUTPUT', True)
         # Clear files
-        try:
-            os.mkdir('./output')
-        except FileExistsError:
-            pass
-        with open(self._tokens_file, 'w') as tokens_file:
-            tokens_file.write("")
-        with open(self._lexical_errors_file, 'w') as lexical_errors_file:
-            lexical_errors_file.write("")
+        if self.OUTPUT:
+            try:
+                os.mkdir('./output')
+            except FileExistsError:
+                pass
+            with open(self._tokens_file, 'w') as tokens_file:
+                tokens_file.write("")
+            with open(self._lexical_errors_file, 'w') as lexical_errors_file:
+                lexical_errors_file.write("")
 
     def __call__(self):
         return self.get_next_token()
 
     _lexical_errors_file = "./output/lexical_errors.txt"
     _tokens_file = './output/tokens.txt'
-
-    _symbols = [
-        ";",
-        ":",
-        ",",
-        "[",
-        "]",
-        "(",
-        ")",
-        "{",
-        "}",
-        "+",
-        "-",
-        "*",
-        "=",
-        "<",
-        "=="
-    ]
-
-    _reserved_keywords = [
-        "if",
-        "else",
-        "void",
-        "int",
-        "while",
-        "break",
-        "continue",
-        "switch",
-        "default",
-        "case",
-        "return"
-    ]
 
     def get_next_token(self):
         current_char = self._get_next_char()
@@ -107,13 +79,14 @@ class Scanner():
             self._current_row, invalid_input, LexicalError.INVALID_INPUT)
 
     def _write_lexical_error(self, row, input, error):
-        try:
-            with open(self._lexical_errors_file, 'a+') as lexical_errors_file:
-                lexical_errors_file.write(
-                    "%d. (%s, %s) \n" % (row, input, error))
-        except IOError:
-            print("Could not write lexical error for row %d" % row)
-            sys.exit(1)
+        if self.OUTPUT:
+            try:
+                with open(self._lexical_errors_file, 'a+') as lexical_errors_file:
+                    lexical_errors_file.write(
+                        "%d. (%s, %s) \n" % (row, input, error))
+            except IOError:
+                print("Could not write lexical error for row %d" % row)
+                sys.exit(1)
 
     def skip_comment(self):
         # Consume the first /
@@ -146,12 +119,11 @@ class Scanner():
                     break
                 elif self._is_end_of_line(current_char):
                     continue
-                    # self._next_row()
                 next_peek = self._peek_next_char()
                 current_char = self._read_next_char()
 
     def _get_next_char(self):
-        _current_token_column = self._current_column
+        self._current_token_column = self._current_column
         next_char = self._peek_next_char()
         current_char = self._read_next_char()
 
@@ -179,9 +151,8 @@ class Scanner():
 
     def _is_symbol(self, character):
         if chr(character) == '=' and chr(self._peek_next_char()) == '=':
-            # self._read_next_char()
             return True
-        return chr(character) in self._symbols
+        return chr(character) in OPERATORS
 
     def _is_digit(self, character):
         return chr(character).isdigit()
@@ -228,6 +199,8 @@ class Scanner():
         token = Token(self._current_row,
                       self._current_token_column, token_type, lexeme)
         self._tokens.append((token.get_type().name, lexeme))
+        if token_type == TokenType.ID:
+            self._symbol_table.insert(Symbol(lexeme))
         return token
 
     def _create_symbol_token(self, character):
@@ -248,11 +221,11 @@ class Scanner():
             lexeme += chr(current_char)
             self._write_lexical_error(
                 self._current_row, lexeme, LexicalError.INVALID_NUMBER)
-            return  # Should propably return ERROR token in the future
+            return  # Raise error and create separate error handler?
         return self.create_token(TokenType.NUM, lexeme)
 
     def _create_eof_token(self):
-        return self.create_token(TokenType.END, '$')
+        return self.create_token(TokenType.EOF, '$')
 
     def _create_id_or_keyword_token(self, character):
         lexeme = ""
@@ -260,7 +233,7 @@ class Scanner():
         while True:
             lexeme += chr(current_char)
             next_char = self._get_current_char()
-            if lexeme in self._reserved_keywords:
+            if lexeme in RESERVED_KEYWORDS:
                 return self.create_token(TokenType.KEYWORD, lexeme)
             if not self._is_digit(next_char) and not self._is_letter(next_char):
                 if not self._is_end_of_keyword_or_identifier(next_char):

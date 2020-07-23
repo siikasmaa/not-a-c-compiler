@@ -1,8 +1,8 @@
-import unittest
-from context import Parser, Scanner
+from unittest import main, TestCase, skip
+from unittest.mock import patch, mock_open
+from context import Parser, Scanner, SymbolTable
 
-
-class TestParser(unittest.TestCase):
+class TestParser(TestCase):
 
     valid_input = (
         b"void main(void){\n"
@@ -12,12 +12,31 @@ class TestParser(unittest.TestCase):
         b"}\n"
     )
 
-    def test_parse_tree(self):
+    def tearDown(self):
+      SymbolTable().clear()
+
+    @patch('compiler.semantic_analyzer.SemanticAnalyzer.code_gen')
+    def test_parse_tree(self, mocked_analyzer):
       self.maxDiff = None
-      scanner = Scanner(self.valid_input)
-      parser = Parser(scanner)
+      scanner = Scanner(self.valid_input, OUTPUT=False)
+      parser = Parser(scanner, OUTPUT=False)
       parse_tree = parser.get_parse_tree()
       self.assertEqual(parse_tree, expected_parse_tree)
+
+    @skip("TODO")
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    def test_write_parse_tree(self, mocked_function):
+      pass
+
+    @skip("TODO")
+    @patch("compiler.semantic_analyzer.SemanticAnalyzer.code_gen")
+    def test_action_symbols(self, mocked_function):
+      pass
+
+    @skip("TODO")
+    @patch("compiler.semantic_analyzer.SemanticAnalyzer.semantic_check")
+    def test_analysis(self, mocked_function):
+      pass
 
     # def test_syntax_errors(self):
     #     scanner = Scanner(self.valid_input)

@@ -1,16 +1,50 @@
 import sys
 from enum import Enum, unique
 
+OPERATORS = [
+    ";",
+    ":",
+    ",",
+    "[",
+    "]",
+    "(",
+    ")",
+    "{",
+    "}",
+    "+",
+    "-",
+    "*",
+    "=",
+    "<",
+    "=="
+]
+
+RESERVED_KEYWORDS = [
+    "if",
+    "else",
+    "void",
+    "int",
+    "while",
+    "break",
+    "continue",
+    "switch",
+    "default",
+    "case",
+    "return",
+    "output"
+]
+
 
 @unique
 class TokenType(Enum):
     KEYWORD = 'KEYWORD'
-    END = "$"
+    EOF = "$"
     ID = 'ID'
     NUM = 'NUM'
     SYMBOL = 'SYMBOL'
 
-class Token():
+
+class Token(object):
 
     def __init__(self, row, column, token_type, lexeme):
         if not isinstance(token_type, TokenType):
@@ -23,6 +57,9 @@ class Token():
 
     def __str__(self):
         return "%s :%d:%d" % (self._lexeme, self._row, self._column)
+
+    def __repr__(self):
+        return self.__str__()
 
     def get_column(self):
         return self._column
