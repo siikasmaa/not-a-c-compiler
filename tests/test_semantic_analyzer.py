@@ -122,7 +122,7 @@ class TestSemanticAnalyzer(TestCase):
     def test_code_generation_3(self):
         self.maxDiff = None
         scanner = Scanner(self.valid_input_3)
-        parser = Parser(scanner, DEBUG=True)
+        parser = Parser(scanner, DEBUG=False)
         with open('output/output.txt', 'r') as output_file:
             output = output_file.read()
         self.assertEqual(output, self.expected_output_3)

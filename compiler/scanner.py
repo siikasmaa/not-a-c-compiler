@@ -11,7 +11,6 @@ class LexicalError(Enum):
     UNMATCHED_COMMENT = 'Unmatched */'
     INVALID_NUMBER = 'Invalid number'
 
-
 class Scanner():
 
     def __init__(self, content, **kwargs):

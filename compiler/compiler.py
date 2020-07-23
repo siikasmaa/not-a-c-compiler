@@ -1,6 +1,7 @@
 import sys
 import scanner
 import parser
+import symbol
 
 def main(path):
     try:
@@ -11,6 +12,7 @@ def main(path):
         return 1
     _scanner = scanner.Scanner(content)
     _parser = parser.Parser(_scanner)
+    print(_symbol_table)
     return 0
 
 

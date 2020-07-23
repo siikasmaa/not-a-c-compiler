@@ -162,7 +162,7 @@ class Parser():
 
     grammar = {
         GrammarString.PROGRAM: {
-            'void': [GrammarString.DECLARATION_LIST], 'int': [GrammarString.DECLARATION_LIST], '': [GrammarString.DECLARATION_LIST]
+            'void': [ActionSymbol.START, GrammarString.DECLARATION_LIST], 'int': [GrammarString.DECLARATION_LIST], '': [GrammarString.DECLARATION_LIST]
         },
         GrammarString.DECLARATION_LIST: {
             'void': [GrammarString.DECLARATION, GrammarString.DECLARATION_LIST], 'int': [GrammarString.DECLARATION, GrammarString.DECLARATION_LIST], '': [GrammarString.EPSILON]
