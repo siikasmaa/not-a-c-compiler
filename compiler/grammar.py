@@ -80,3 +80,4 @@ class ActionSymbol(Enum):
     PROCESS_NUM = "PNUM"
     PROCESS_ID = "PID"
     PROCESS_ARRAY = "PROCESS_ARRAY"
+    ACCESS_ARRAY = "ACCESS_ARRAY"

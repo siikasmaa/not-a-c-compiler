@@ -3,6 +3,7 @@ import scanner
 import parser
 import symbol
 
+
 def main(path):
     try:
         with open(path, 'rb') as content_file:

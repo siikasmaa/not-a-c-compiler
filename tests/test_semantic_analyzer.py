@@ -52,7 +52,6 @@ class TestSemanticAnalyzer(TestCase):
 
     valid_input_2 = (
         b"void main(void){\n"
-        b"int arr[10];\n"
         b"int a;\n"
         b"int b;\n"
         b"a = 10 * 2 + 3 * (1 < 0);\n"
@@ -64,17 +63,17 @@ class TestSemanticAnalyzer(TestCase):
 
     expected_output_2 = (
         "0	(ASSIGN, #0, 500, )\n"
-        "1	(ASSIGN, #0, 508, )\n"
-        "2	(ASSIGN, #0, 512, )\n"
+        "1	(ASSIGN, #0, 504, )\n"
+        "2	(ASSIGN, #0, 508, )\n"
         "3	(MULT, #2, #10, 1000)\n"
         "4	(LT, #1, #0, 1004)\n"
         "5	(MULT, 1004, #3, 1008)\n"
         "6	(ADD, 1008, 1000, 1012)\n"
-        "7	(ASSIGN, 1012, 508, )\n"
+        "7	(ASSIGN, 1012, 504, )\n"
         "8	(ADD, #3, #4, 1016)\n"
-        "9	(ASSIGN, 1016, 512, )\n"
-        "10	(PRINT, 508, , )\n"
-        "11	(PRINT, 512, , )\n"
+        "9	(ASSIGN, 1016, 508, )\n"
+        "10	(PRINT, 504, , )\n"
+        "11	(PRINT, 508, , )\n"
     )
 
     valid_input_3 = (
@@ -86,7 +85,7 @@ class TestSemanticAnalyzer(TestCase):
         b"arr[0] = var1 = var2 = 5;\n"
         b"output(var1);\n"
         b"output(arr[0]);\n"
-        b"arr[var1 = var2] = var2 = 7;\n"
+        b"arr[var1] = var2 = 7;\n"
         b"output(var1);\n"
         b"output(var2);\n"
         b"output(arr[5]);\n"

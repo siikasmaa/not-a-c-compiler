@@ -91,6 +91,11 @@ class SymbolTable(object, metaclass=Singleton):
     def lookup(self, name):
         return self._symbols.get(name, None)
 
+    def lookup_with_address(self, address):
+        for (x, y) in self._symbols.items():
+            if y.get_address() == address:
+              return y
+
     def get_address(self, size):
         address = self._base_addr + self._var_count * size
         self._var_count += 1

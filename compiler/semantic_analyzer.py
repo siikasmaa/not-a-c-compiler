@@ -141,7 +141,8 @@ class SemanticAnalyzer():
             ActionSymbol.JUMP: self._action_jump,
             ActionSymbol.CONDITIONAL_JUMP: self._action_conditional_jump,
             ActionSymbol.PRINT: self._output_routine,
-            ActionSymbol.PROCESS_ARRAY: self._action_process_array
+            ActionSymbol.PROCESS_ARRAY: self._action_process_array,
+            ActionSymbol.ACCESS_ARRAY: self._action_access_array
         }
 
         routine = routines.get(
@@ -320,5 +321,34 @@ class SemanticAnalyzer():
         return 'PROCESSED PRINT ACTION'
 
     def _action_process_array(self, current_input):
-        pass
-        # return 'PROCESSED PRINT ACTION'
+        symbol = self._symbol_table.lookup_with_address(
+            self._semantic_stack.top())
+        arguments = [self._semantic_stack.top()]
+        self._write_address_code(increment=True, operation=ActionSymbol.ASSIGN.value, arguments=['#0',
+                                                                                                 self._semantic_stack.top()])
+
+        for i in range(int(current_input)-1):
+            address = self._symbol_table.get_address(4)
+            self._write_address_code(increment=True, operation=ActionSymbol.ASSIGN.value, arguments=['#0',
+                                                                                                     address])
+            arguments.append(address)
+        self._semantic_stack.pop(1)
+        symbol.set_arguments(arguments)
+        return 'PROCESSED PROCESS ARRAY ACTION'
+
+    def _action_access_array(self, current_input):
+        if isinstance(self._semantic_stack.top(), str):
+            index = self._semantic_stack.top().replace('#', '')
+            array_address = self._semantic_stack.from_top(1)
+            array_symbol = self._symbol_table.lookup_with_address(
+                array_address)
+            array_element = array_symbol.get_arguments()[int(index)]
+            self._semantic_stack.pop(2)
+            self._semantic_stack.push(array_element)
+        else:
+            index = self._semantic_stack.top()
+            array_address = self._semantic_stack.from_top(1)
+            array_element = index
+        self._semantic_stack.pop(2)
+        self._semantic_stack.push(array_element)
+        return 'PROCESSED ACCESS ARRAY ACTION'
