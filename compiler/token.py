@@ -43,6 +43,9 @@ class TokenType(Enum):
     NUM = 'NUM'
     SYMBOL = 'SYMBOL'
 
+    def __eq__(self, other):
+      return self.value == other.value
+
 
 class Token(object):
 

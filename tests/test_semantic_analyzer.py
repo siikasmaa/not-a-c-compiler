@@ -27,7 +27,6 @@ class TestSemanticAnalyzer(TestCase):
         b"}\n"
         b"}\n"
         b"}\n"
-        b"}\n"
     )
 
     expected_output = (
@@ -94,10 +93,19 @@ class TestSemanticAnalyzer(TestCase):
         b"}\n"
     )
 
+    # TODO: CONTAINS ERROR AFTER LINE 3
     expected_output_3 = (
         "0	(ASSIGN, #0, 500, )\n"
         "1	(ASSIGN, #0, 508, )\n"
         "2	(ASSIGN, #0, 512, )\n"
+        "3	(ASSIGN, #1, 508, )\n"
+        "4	(ASSIGN, #5, 512, )\n"
+        "5	(PRINT, 508, , )\n"
+        "6	(PRINT, #0, , )\n"
+        "7	(ASSIGN, #7, 512, )\n"
+        "8	(PRINT, 508, , )\n"
+        "9	(PRINT, 512, , )\n"
+        "10	(PRINT, #5, , )\n"
     )
 
     def tearDown(self):
@@ -106,7 +114,7 @@ class TestSemanticAnalyzer(TestCase):
     def test_code_generation(self):
         self.maxDiff = None
         scanner = Scanner(self.valid_input)
-        parser = Parser(scanner, DEBUG=False)
+        Parser(scanner, DEBUG=False, OUTPUT=False)
         with open('output/output.txt', 'r') as output_file:
             output = output_file.read()
         self.assertEqual(output, self.expected_output)
@@ -114,7 +122,7 @@ class TestSemanticAnalyzer(TestCase):
     def test_code_generation_2(self):
         self.maxDiff = None
         scanner = Scanner(self.valid_input_2)
-        parser = Parser(scanner, DEBUG=False)
+        Parser(scanner, DEBUG=False, OUTPUT=False)
         with open('output/output.txt', 'r') as output_file:
             output = output_file.read()
         self.assertEqual(output, self.expected_output_2)
@@ -122,7 +130,7 @@ class TestSemanticAnalyzer(TestCase):
     def test_code_generation_3(self):
         self.maxDiff = None
         scanner = Scanner(self.valid_input_3)
-        parser = Parser(scanner, DEBUG=False)
+        Parser(scanner, DEBUG=False, OUTPUT=False)
         with open('output/output.txt', 'r') as output_file:
             output = output_file.read()
         self.assertEqual(output, self.expected_output_3)
